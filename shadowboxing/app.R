@@ -7,45 +7,80 @@
 #    https://shiny.posit.co/
 #
 
+# Libraries ####
+
 library(shiny)
+library(readr)
+library(dplyr)
+library(text2speech)
+library(stringr)
+library(beepr)
 
-# Define UI for application that draws a histogram
-ui <- shiny::fluidPage(
+# Loading the dataframe with combis ####
 
-    # Application title
-    shiny::titlePanel("Shadow boxing"),
+combis <- readr::read_csv("../combis.csv")
 
-    # Sidebar with a slider input for number of bins 
-    shiny::sidebarLayout(
-        shiny::sidebarPanel(
-            shiny::sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
+# Fixed parameters ####
 
-        # Show a plot of the generated distribution
-        shiny::mainPanel(
-           shiny::plotOutput("distPlot")
-        )
-    )
-)
+base_time_per_strike = 1 # in seconds
+pause_between_strikes = 0.2 # in seconds
 
-# Define server logic required to draw a histogram
-server <- function(input, output) {
+# Functions ####
 
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
-    })
+calculate_time <- function(strikes, base_time, intencity) {
+  total_time <- strikes * (base_time * intencity)
+  return(total_time)
 }
 
-# Run the application 
+say <- function(text) {
+  print(text)
+  system(paste0("say '", text, "'"))
+}
+
+# UI ####
+
+ui <- shiny::fluidPage(
+  # Application title
+  shiny::titlePanel("Shadow boxing"),
+
+  # Sidebar with a slider input for number of bins 
+  shiny::sidebarLayout(
+    shiny::sidebarPanel(
+      shiny::sliderInput("intencity",
+                         "Intencity:",
+                         min = 0.1,
+                         max = 4,
+                         value = 1),
+      shiny::numericInput("n_combos_per_round",
+                          "Number of combos per round:",
+                          min = 1,
+                          max = 18,
+                          step = 1,
+                          value = 5),
+      shiny::numericInput("n_rounds",
+                          "Number of rounds:",
+                          min = 1,
+                          max = 100,
+                          step = 1,
+                          value = 2),
+      shiny::actionButton("start_button",
+                          "Start!",
+                          class = "btn-success")
+      ),
+    
+    # Show a plot of the generated distribution
+    shiny::mainPanel(
+      shiny::textOutput("value")
+      )
+    )
+  )
+
+# Server ####
+
+server <- function(input, output) {
+  output$value = shiny::renderText("Hey!")
+}
+
+# Running the app ####
+
 shiny::shinyApp(ui = ui, server = server)
