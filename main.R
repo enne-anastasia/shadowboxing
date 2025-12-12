@@ -1,37 +1,37 @@
 # Libraries ####
 
-library(readr)
-library(dplyr)
-library(text2speech)
-library(stringr)
-library(beepr)
+# library(readr)
+# library(dplyr)
+# library(text2speech)
+# library(stringr)
+# library(beepr)
 
 # Loading the dataframe with combis ####
 
-combis <- readr::read_csv("combis.csv")
+# combis <- readr::read_csv("combis.csv")
 
 # Fixed parameters ####
 
-base_time_per_strike = 1 # in seconds
-pause_between_strikes = 0.2 # in seconds
+# base_time_per_strike = 1 # in seconds
+# pause_between_strikes = 0.2 # in seconds
 
 # Variable parameters ####
 
-intencity = 1 # coefficient
-n_combos_per_round = 5
-n_rounds = 2
+# intencity = 1 # coefficient
+# n_combos_per_round = 5
+# n_rounds = 2
 
 # Functions ####
 
-calculate_time <- function(strikes, base_time, intencity) {
-  total_time <- strikes * (base_time * intencity)
-  return(total_time)
-}
-
-say <- function(text) {
-  print(text)
-  system(paste0("say '", text, "'"))
-}
+# calculate_time <- function(strikes, base_time, intencity) {
+#   total_time <- strikes * (base_time * intencity)
+#   return(total_time)
+# }
+# 
+# say <- function(text) {
+#   print(text)
+#   system(paste0("say '", text, "'"))
+# }
 
 # Main loop ####
 
