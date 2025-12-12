@@ -60,7 +60,6 @@ ui <- shiny::fluidPage(
       shiny::numericInput("n_rounds",
                           "Number of rounds:",
                           min = 1,
-                          max = 100,
                           step = 1,
                           value = 2),
       shiny::actionButton("start_button",
@@ -78,7 +77,9 @@ ui <- shiny::fluidPage(
 # Server ####
 
 server <- function(input, output) {
-  output$value = shiny::renderText("Hey!")
+  shiny::observeEvent(input$start_button, {
+    output$value = shiny::renderText("Hey!")
+  })
 }
 
 # Running the app ####
