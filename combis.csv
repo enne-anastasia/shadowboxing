@@ -1,19 +1,35 @@
-id,combi,length
-1,double jab-hook,3
-2,double jab-teep,3
-3,jab-cross-hook-rear roundhouse kick,4
-4,jab-cross-hook-uppercut-lead roundhouse kick,5
-5,jab-cross-switch kick,4
-6,jab-cross-switch teep,4
-7,jab-cross-slip jab with jab to the body and step-cross to the head,4
-8,fake lead teep-rear roundhouse kick,2
-9,lead teep to stop-cross,2
-10,lead roundhouse kick-cross-rear roundhouse kick,3
-11,lead low kick-cross-hook,3
-12,lead low kick-cross-uppercut-hook,4
-13,lead low kick-cross-uppercut-rear push knee,4
-14,lead low kick-cross-uppercut-hook-jab-rear roundhouse kick,6
-15,right check-right roundhouse-left hook-cross,4
-16,left check-left roundhouse-cross-hook,4
-17,roll to the left-left hook-cross-lead low kick,4
-18,roll to the right-cross-hook-rear low kick,4
+id,combi,length,date_added
+1,double jab - hook,3,12.12.2025
+2,double jab - teep,3,12.12.2025
+3,jab - cross - hook - rear roundhouse kick,4,12.12.2025
+4,jab - cross - hook - uppercut - lead roundhouse kick,5,12.12.2025
+5,jab - cross - switch kick,4,12.12.2025
+6,jab - cross - switch teep,4,12.12.2025
+7,jab - cross - slip jab with jab to the body and step - cross to the head,4,12.12.2025
+8,fake lead teep - rear roundhouse kick,2,12.12.2025
+9,lead teep to stop - cross,2,12.12.2025
+10,lead roundhouse kick - cross - rear roundhouse kick,3,12.12.2025
+11,lead low kick - cross - hook,3,12.12.2025
+12,lead low kick - cross - uppercut - hook,4,12.12.2025
+13,lead low kick - cross - uppercut - rear push knee,4,12.12.2025
+14,lead low kick - cross - uppercut - hook - jab - rear roundhouse kick,6,12.12.2025
+15,right check - right roundhouse kick - left hook - cross,4,12.12.2025
+16,left check - left roundhouse kick - cross - hook,4,12.12.2025
+17,roll right hook - left hook - cross - lead low kick,4,12.12.2025
+18,roll left hook - cross - hook - rear low kick,4,12.12.2025
+19,jab - uppercut - roll left hook - right hook,4,14.12.2025
+20,slip jab - slip cross - jab - cross - lead low kick,5,14.12.2025
+21,jab - cross to the body - jab - cross - exit with jab,5,19.12.2025
+22,lead low kick - rear low kick - back fist,3,19.12.2025
+23,slip jab - cross - hook - roll right hook - left uppercut,5,19.12.2025
+24,double jab - cross - hook - rear roundhouse kick,5,22.12.2025
+25,jab - cross - roll left hook - right hook - left uppercut,5,22.12.2025
+26,jab - cross - lead roundhouse kick - cross - jab - rear roundhouse kick,6,22.12.2025
+27,jab - cross - jab - rear roundhouse kick,4,22.12.2025
+28,lead low kick - rear roundhouse kick,2,22.12.2025
+29,lead low kick - cross - uppercut - hook - lead roundhouse kick,5,22.12.2025
+30,roll right hook - left hook - cross - left hook - roll right hook and cut angle,5,22.12.2025
+31,roll right hook - left hook - right backfist,3,22.12.2025
+32,slip jab - slip cross - jab - cross,4,22.12.2025
+33,slip jab - slip cross - jab - cross - hook - uppercut,6,22.12.2025
+34,slip jab - cross - switch roundhouse kick,4,22.12.2025
