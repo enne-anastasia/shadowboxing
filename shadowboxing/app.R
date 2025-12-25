@@ -114,7 +114,7 @@ server <- function(input, output) {
     if (nrow(df()) < input$n_combos_per_round) {
       round_combis(dplyr::sample_n(df(), input$n_combos_per_round, replace = TRUE))
     } else {
-      round_combis(dplyr::sample_n(df(), input$n_combos_per_round), replace = FALSE)
+      round_combis(dplyr::sample_n(df(), input$n_combos_per_round, replace = FALSE))
     }
     # show the first combo
     state$combo = 1
