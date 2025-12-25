@@ -34,8 +34,8 @@ ui <- shiny::fluidPage(
       shiny::sliderInput("intensity",
                          "Intensity (seconds per combo):",
                          min = 0,
-                         max = 30,
-                         step = 1,
+                         max = 60,
+                         step = 5,
                          value = 15),
       # numeric input for number of combinations per round: minimum 1 combo,
       # maximum of total amount of combos in the library, default value 5
@@ -61,11 +61,13 @@ ui <- shiny::fluidPage(
 
     # Show a plot of the generated distribution
     shiny::mainPanel(
-      shiny::h3(paste0("Number of available combis: ")),
-      shiny::span(shiny::textOutput("n_combis_total"), style="font-size:20px"),
-      shiny::h3(paste0("Status:")),
-      shiny::span(shiny::textOutput("status"), style="font-size:20px"),
-      shiny::h3(paste0("Current combo:")),
+      shiny::h4(paste0("Number of available combis: ")),
+      shiny::span(shiny::textOutput("n_combis_total")),
+      shiny::h4(paste0("Total time with given intensity and combos per round:")),
+      shiny::span(shiny::textOutput("total_time")),
+      shiny::h4(paste0("Status:")),
+      shiny::span(shiny::textOutput("status")),
+      shiny::h4(paste0("Current combo:")),
       shiny::span(shiny::textOutput("combo"), style="font-size:80px")
       )
     )
@@ -95,12 +97,25 @@ server <- function(input, output) {
   # output how many combis there are in the database
   output$n_combis_total = shiny::renderText(nrow(df()))
   
+  output$total_time = shiny::renderText({
+    if (!is.na(input$n_combos_per_round)) {
+      paste0(
+        round(input$intensity*input$n_combos_per_round/60, 2)," minutes")
+    } else {
+      " "
+    }
+  })
+  
   # start button handler
   shiny::observeEvent(input$start_button, {
     # change running status to true
     state$running = TRUE
     # sample combos for the current round
-    round_combis(dplyr::sample_n(df(), input$n_combos_per_round))
+    if (nrow(df()) < input$n_combos_per_round) {
+      round_combis(dplyr::sample_n(df(), input$n_combos_per_round, replace = TRUE))
+    } else {
+      round_combis(dplyr::sample_n(df(), input$n_combos_per_round), replace = FALSE)
+    }
     # show the first combo
     state$combo = 1
     state$last_combo = 0
