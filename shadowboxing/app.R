@@ -16,6 +16,10 @@ library(text2speech)
 library(stringr)
 library(beepr)
 
+# Loading the combo database for the interface
+
+combis = readr::read_csv("../combis.csv")
+
 # UI ####
 
 ui <- shiny::fluidPage(
@@ -31,8 +35,8 @@ ui <- shiny::fluidPage(
                          "Intensity (seconds per combo):",
                          min = 0,
                          max = 30,
-                         step = 0.5,
-                         value = 1),
+                         step = 1,
+                         value = 15),
       # numeric input for number of combinations per round: minimum 1 combo,
       # maximum of total amount of combos in the library, default value 5
       shiny::numericInput("n_combos_per_round",
@@ -40,6 +44,10 @@ ui <- shiny::fluidPage(
                           min = 1,
                           step = 1,
                           value = 5),
+      shiny::checkboxGroupInput("length_select",
+                                "Combo length:",
+                                choices = sort(unique(combis$length)),
+                                selected = sort(unique(combis$length))),
       # button to start rounds with chosen intensity, number of combos per
       # round, and number of rounds
       shiny::actionButton("start_button",
@@ -67,8 +75,8 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output) {
   # reactive dataframe with combi database
-  df = shiny::reactiveVal(
-    readr::read_csv("../combis.csv")
+  df = shiny::reactive(
+    combis %>% dplyr::filter(length %in% input$length_select)
   )
   # reactive dataframe with combis of the current round
   round_combis = shiny::reactiveVal(
@@ -150,7 +158,7 @@ server <- function(input, output) {
         if (new_combo_index <= input$n_combos_per_round) {
           # if index has changed
           if (new_combo_index != state$last_combo) {
-            beepr::beep(sound = 1)
+            beepr::beep(sound = 2)
             state$last_combo = new_combo_index
           }
           # update the index
