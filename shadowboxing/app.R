@@ -12,7 +12,6 @@
 library(shiny)
 library(readr)
 library(dplyr)
-library(text2speech)
 library(stringr)
 library(beepr)
 
@@ -29,6 +28,20 @@ ui <- shiny::fluidPage(
   # Sidebar with inputs
   shiny::sidebarLayout(
     shiny::sidebarPanel(
+      shiny::span("Number of available combis:", style = "font-weight:bold;"),
+      shiny::span(shiny::textOutput("n_combis_total")),
+      shiny::hr(),
+      shiny::checkboxGroupInput("length_select",
+                                "Combo length:",
+                                choices = sort(unique(combis$length)),
+                                selected = sort(unique(combis$length))),
+      # numeric input for number of combinations per round: minimum 1 combo,
+      # maximum of total amount of combos in the library, default value 5
+      shiny::numericInput("n_combos_per_round",
+                          "Number of combos per round:",
+                          min = 1,
+                          step = 1,
+                          value = 5),
       # slider input for intensity that then will be used to calculate how much
       # time the app will wait after announcing a combination
       shiny::sliderInput("intensity",
@@ -37,17 +50,10 @@ ui <- shiny::fluidPage(
                          max = 60,
                          step = 5,
                          value = 15),
-      # numeric input for number of combinations per round: minimum 1 combo,
-      # maximum of total amount of combos in the library, default value 5
-      shiny::numericInput("n_combos_per_round",
-                          "Number of combos per round:",
-                          min = 1,
-                          step = 1,
-                          value = 5),
-      shiny::checkboxGroupInput("length_select",
-                                "Combo length:",
-                                choices = sort(unique(combis$length)),
-                                selected = sort(unique(combis$length))),
+      shiny::hr(),
+      shiny::span("Total time:", style = "font-weight:bold;"),
+      shiny::span(shiny::textOutput("total_time")),
+      shiny::hr(),
       # button to start rounds with chosen intensity, number of combos per
       # round, and number of rounds
       shiny::actionButton("start_button",
@@ -61,13 +67,9 @@ ui <- shiny::fluidPage(
 
     # Show a plot of the generated distribution
     shiny::mainPanel(
-      shiny::h4(paste0("Number of available combis: ")),
-      shiny::span(shiny::textOutput("n_combis_total")),
-      shiny::h4(paste0("Total time with given intensity and combos per round:")),
-      shiny::span(shiny::textOutput("total_time")),
-      shiny::h4(paste0("Status:")),
-      shiny::span(shiny::textOutput("status")),
-      shiny::h4(paste0("Current combo:")),
+      shiny::h3(paste0("Status:")),
+      shiny::span(shiny::textOutput("status"), style = "font-size:20px"),
+      shiny::h3(paste0("Current combo:")),
       shiny::span(shiny::textOutput("combo"), style="font-size:80px")
       )
     )
@@ -102,7 +104,7 @@ server <- function(input, output) {
       paste0(
         round(input$intensity*input$n_combos_per_round/60, 2)," minutes")
     } else {
-      " "
+      "0 minutes"
     }
   })
   
@@ -190,155 +192,3 @@ server <- function(input, output) {
 # Running the app ####
 
 shiny::shinyApp(ui = ui, server = server)
-
-# Archive ####
-
-# # start button handler
-# shiny::observeEvent(input$start_button, {
-#   state$running = TRUE
-#   state$paused = FALSE
-#   state$round = 1
-#   state$combo = 1
-#   state$start_time = Sys.time()
-#   intensity = input$intensity
-#   n_combos_per_round = input$n_combos_per_round
-#   n_rounds = input$n_rounds
-#   round_combis(dplyr::sample_n(df(), n_combos_per_round))
-# })
-# # shiny::observeEvent(input$pause_button, {
-# #   if (state$running) {
-# #     state$paused = !state$paused
-# #   }
-# # })
-# shiny::observeEvent(input$stop_button, {
-#   state$running = FALSE
-#   state$paused = FALSE
-# })
-# output$status = shiny::renderText({
-#   if (state$paused) {
-#     "Paused"
-#   } else if (state$combo > 0 && state$running) {
-#     paste0("Round ",state$round,"/",input$n_rounds," - Combo ",state$combo,
-#            "/",input$n_combos_per_round)
-#   } else {
-#     "Press Start! to begin"
-#   }
-# })
-# output$combo = shiny::renderText({
-#   if (state$combo > 0 && state$running && state$combo <= input$n_combos_per_round) {
-#     round_combis()$combi[state$combo]
-#   } else {
-#     ""
-#   }
-# })
-# shiny::observe({
-#   timer()
-#   
-#   if (state$running) {
-#     shiny::isolate({
-#       elapsed = as.numeric(difftime(Sys.time(), state$start_time, units = "secs"))
-#       new_index = floor(elapsed / 3) + 1
-#       if (new_index <= input$n_combos_per_round) {
-#         state$combo = new_index
-#       } else {
-#         state$running = FALSE
-#       }
-#     })
-#   }
-#   # if (state$running && !state$paused) {
-#   #   shiny::invalidateLater(shiny::isolate(
-#   #     round_combis()$length[state$combo]*input$intensity*1000))
-#   #   shiny::isolate({
-#   #     if (state$combo < input$n_combos_per_round) {
-#   #       state$combo = state$combo + 1
-#   #     } else {
-#   #       state$running = FALSE
-#   #     }
-#   #   })
-#   # }
-# })
-
-# AI example ####
-
-# library(shiny)
-# 
-# ui <- fluidPage(
-#   titlePanel("Vector Element Display"),
-#   
-#   actionButton("start", "Start"),
-#   actionButton("pause", "Pause"),
-#   
-#   h3("Current Element:"),
-#   textOutput("current_element")
-# )
-# 
-# server <- function(input, output, session) {
-#   
-#   # Your vector
-#   my_vector <- c("Apple", "Banana", "Cherry", "Date", "Elderberry")
-#   
-#   # Reactive values to track state
-#   values <- reactiveValues(
-#     index = 0,
-#     running = FALSE,
-#     start_time = NULL,
-#     paused_elapsed = 0  # Track elapsed time when paused
-#   )
-#   
-#   # Timer that ticks every second
-#   timer <- reactiveTimer(1000)
-#   
-#   # Start button handler
-#   observeEvent(input$start, {
-#     if (!values$running) {
-#       if (values$index == 0) {
-#         # Starting fresh
-#         values$index <- 1
-#         values$paused_elapsed <- 0
-#       }
-#       # Resume from where we paused
-#       values$running <- TRUE
-#       values$start_time <- Sys.time()
-#     }
-#   })
-#   
-#   # Pause button handler
-#   observeEvent(input$pause, {
-#     if (values$running) {
-#       values$running <- FALSE
-#       # Save the elapsed time when pausing
-#       values$paused_elapsed <- values$paused_elapsed + 
-#         as.numeric(difftime(Sys.time(), values$start_time, units = "secs"))
-#     }
-#   })
-#   
-#   # Update index based on elapsed time
-#   observe({
-#     timer()  # Depend on timer
-#     
-#     if (values$running) {
-#       isolate({
-#         current_elapsed <- as.numeric(difftime(Sys.time(), values$start_time, units = "secs"))
-#         total_elapsed <- values$paused_elapsed + current_elapsed
-#         new_index <- floor(total_elapsed / 3) + 1
-#         
-#         if (new_index <= length(my_vector)) {
-#           values$index <- new_index
-#         } else {
-#           values$running <- FALSE
-#         }
-#       })
-#     }
-#   })
-#   
-#   # Display current element
-#   output$current_element <- renderText({
-#     if (values$index > 0 && values$index <= length(my_vector)) {
-#       my_vector[values$index]
-#     } else {
-#       "Press Start to begin"
-#     }
-#   })
-# }
-# 
-# shinyApp(ui = ui, server = server)
