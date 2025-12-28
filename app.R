@@ -58,8 +58,8 @@ ui <- shiny::fluidPage(
       # time the app will wait after announcing a combination
       shiny::sliderInput("intensity",
                          "Intensity (seconds per combo):",
-                         min = 0,
-                         max = 60,
+                         min = 5,
+                         max = 120,
                          step = 5,
                          value = 15),
       shiny::hr(),
@@ -205,3 +205,11 @@ server <- function(input, output) {
 # Running the app ####
 
 shiny::shinyApp(ui = ui, server = server)
+
+# Exporting the app ####
+
+# shinylive::export(appdir = ".", destdir = "docs")
+
+# Testing the app ####
+
+# httpuv::runStaticServer("docs/", port = 8008)
