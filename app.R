@@ -40,7 +40,7 @@ ui <- shiny::fluidPage(
   # Sidebar with inputs
   shiny::sidebarLayout(
     shiny::sidebarPanel(
-      shiny::span("Number of available combis:", style = "font-weight:bold;"),
+      shiny::span("Number of available combos:", style = "font-weight:bold;"),
       shiny::span(shiny::textOutput("n_combis_total")),
       shiny::hr(),
       shiny::checkboxGroupInput("length_select",
