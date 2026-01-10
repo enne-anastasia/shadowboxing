@@ -47,6 +47,10 @@ ui <- shiny::fluidPage(
                                 "Combo length:",
                                 choices = sort(unique(combis$length)),
                                 selected = sort(unique(combis$length))),
+      shiny::checkboxGroupInput("type_select",
+                                "Combo type:",
+                                choices = sort(unique(combis$type)),
+                                selected = sort(unique(combis$type))),
       # numeric input for number of combinations per round: minimum 1 combo,
       # maximum of total amount of combos in the library, default value 5
       shiny::numericInput("n_combos_per_round",
@@ -59,7 +63,7 @@ ui <- shiny::fluidPage(
       shiny::sliderInput("intensity",
                          "Intensity (seconds per combo):",
                          min = 5,
-                         max = 120,
+                         max = 125,
                          step = 5,
                          value = 15),
       shiny::hr(),
@@ -92,7 +96,8 @@ ui <- shiny::fluidPage(
 server <- function(input, output) {
   # reactive dataframe with combi database
   df = shiny::reactive(
-    combis %>% dplyr::filter(length %in% input$length_select)
+    combis %>% dplyr::filter(length %in% input$length_select) %>%
+      dplyr::filter(type %in% input$type_select)
   )
   # reactive dataframe with combis of the current round
   round_combis = shiny::reactiveVal(
