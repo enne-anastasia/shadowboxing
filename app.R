@@ -31,17 +31,27 @@ ui <- shiny::fluidPage(
         audio.play()
           .then(() => console.log('Success!'))
           .catch((error) => console.error('Error:', error));
-      }
+      };
+      Shiny.addCustomMessageHandler('speakText', function(text) {
+        var msg = new SpeechSynthesisUtterance(text);
+        msg.pitch = 1;
+        msg.rate = 1;
+        msg.lang = 'en-US';
+        window.speechSynthesis.speak(msg);
+      })
     "))
   ),
   # Application title
   shiny::titlePanel("Shadow boxing"),
-
+  
   # Sidebar with inputs
   shiny::sidebarLayout(
     shiny::sidebarPanel(
       shiny::span("Number of available combos:", style = "font-weight:bold;"),
       shiny::span(shiny::textOutput("n_combis_total")),
+      shiny::checkboxInput("TTS_select",
+                           "Use Text-to-Speech",
+                           value = FALSE),
       shiny::hr(),
       shiny::checkboxGroupInput("length_select",
                                 "Combo length:",
@@ -79,21 +89,21 @@ ui <- shiny::fluidPage(
       shiny::actionButton("stop_button",
                           "Stop",
                           class = "btn-danger")
-      ),
-
+    ),
+    
     # Show a plot of the generated distribution
     shiny::mainPanel(
       shiny::h3(paste0("Status:")),
       shiny::span(shiny::textOutput("status"), style = "font-size:20px"),
       shiny::h3(paste0("Current combo:")),
       shiny::span(shiny::textOutput("combo"), style="font-size:80px")
-      )
     )
   )
+)
 
 # Server ####
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   # reactive dataframe with combi database
   df = shiny::reactive(
     combis %>% dplyr::filter(length %in% input$length_select) %>%
@@ -183,7 +193,7 @@ server <- function(input, output) {
       shiny::isolate({
         # calculate how much time has passed since the training has started
         elapsed = as.numeric(difftime(Sys.time(), state$start_time, 
-                                              units = "secs"))
+                                      units = "secs"))
         # calculate new combo index based on how much time has passed divided
         # by intensity
         new_combo_index = floor(elapsed / input$intensity) + 1
@@ -192,8 +202,13 @@ server <- function(input, output) {
         if (new_combo_index <= input$n_combos_per_round) {
           # if index has changed
           if (new_combo_index != state$last_combo) {
-            shinyjs::runjs('playSound("beep-401570.mp3")')
-            # beepr::beep(sound = 2)
+            if (input$TTS_select) {
+              # sendCustomMessageHandler is defined in the UI
+              session$sendCustomMessage("speakText", round_combis()$combi[new_combo_index]) 
+            } else {
+              # playSound is defined in the UI
+              shinyjs::runjs('playSound("beep-401570.mp3")') 
+            }
             state$last_combo = new_combo_index
           }
           # update the index
