@@ -38,7 +38,24 @@ ui <- shiny::fluidPage(
         msg.rate = 1;
         msg.lang = 'en-US';
         window.speechSynthesis.speak(msg);
-      })
+      });
+      let wakelock = null;
+      async function enableWakeLock() {
+        try {
+          if ('wakeLock' in navigator) {
+            wakelock = await navigator.wakeLock.request('screen');
+            console.log('Screen wil stay on');
+          } 
+        } catch (err) {
+          console.error('Wake lock failed: ', err);
+        }
+      }
+      document.addEventListener('visibilitychange', async () => {
+        if (wakelock !== null && document.visibilityState === 'visible') {
+          await enableWakeLock();
+        }
+      });
+      document.addEventListener('click', enableWakeLock, {once: true});
     "))
   ),
   # Application title
