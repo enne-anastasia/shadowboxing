@@ -11,6 +11,7 @@
 
 library(shiny)
 library(shinyjs)
+library(shinytitle)
 library(readr)
 library(dplyr)
 library(beepr)
@@ -18,6 +19,7 @@ library(beepr)
 # Loading the combo database for the interface
 
 combis = readr::read_csv("combis.csv")
+combis$date_added = as.Date(combis$date_added, format = "%d.%m.%Y")
 
 # UI ####
 
@@ -59,7 +61,9 @@ ui <- shiny::fluidPage(
     "))
   ),
   # Application title
-  shiny::titlePanel("Shadow boxing"),
+  shiny::titlePanel("Shadow boxing",
+                    windowTitle = "🥊 Shadow boxing"),
+  use_shiny_title(),
   
   # Sidebar with inputs
   shiny::sidebarLayout(
@@ -70,6 +74,14 @@ ui <- shiny::fluidPage(
                            "Use Text-to-Speech",
                            value = FALSE),
       shiny::hr(),
+      shiny::sliderInput("date_select",
+                         "Date added:",
+                         min = min(combis$date_added),
+                         max = max(combis$date_added),
+                         value = c(min(combis$date_added),max(combis$date_added)),
+                         ticks = FALSE,
+                         timeFormat = "%d.%m.%Y",
+                         dragRange = TRUE),
       shiny::checkboxGroupInput("length_select",
                                 "Combo length:",
                                 choices = sort(unique(combis$length)),
@@ -124,7 +136,9 @@ server <- function(input, output, session) {
   # reactive dataframe with combi database
   df = shiny::reactive(
     combis %>% dplyr::filter(length %in% input$length_select) %>%
-      dplyr::filter(type %in% input$type_select)
+      dplyr::filter(type %in% input$type_select) %>%
+      dplyr::filter(date_added >= input$date_select[1] &
+                      date_added <= input$date_select[2])
   )
   # reactive dataframe with combis of the current round
   round_combis = shiny::reactiveVal(
