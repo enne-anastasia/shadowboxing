@@ -31,8 +31,8 @@ id,combi,length,date_added,type
 30,roll rear hook - lead hook - rear backfist,3,22.12.2025,kickboxing
 31,slip jab - cross - switch roundhouse kick,4,22.12.2025,kickboxing
 32,double jab - cross,3,26.12.2025,boxing
-33,jab - cross - jab,3,26.12.2026,boxing
-34,rear hook - lead hook,2,26.12.2027,boxing
+33,jab - cross - jab,3,26.12.2025,boxing
+34,rear hook - lead hook,2,26.12.2025,boxing
 35,jab - cross - uppercut - lead teep - side kick ,5,06.01.2026,kickboxing
 36,jab - cross - uppercut - rear low kick - lead low kick - cross - uppercut - hook - lead low kick - rear low kick,10,06.01.2026,kickboxing
 37,jab - cross - uppercut - rear roundhouse kick,4,06.01.2026,kickboxing
@@ -46,3 +46,5 @@ id,combi,length,date_added,type
 45,jab - cross - slip jab - roll rear hook - lead hook - rear knee grabbing rear shoulder with rear hand - lead elbow,7,23.01.2026,kickboxing
 46,cross - slip rear hook - cross - uppercut - roll lead hook - rear hook,6,23.01.2026,boxing
 47,cross - slip rear hook - cross - uppercut - roll lead hook - rear hook - lead low kick - cross,8,23.01.2026,kickboxing
+48,jab - cross - uppercut - rear low kick - side kick same leg,5,27.01.2026,kickboxing
+49,lead teep - rear back kick,2,27.01.2026,kickboxing
