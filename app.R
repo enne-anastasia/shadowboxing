@@ -73,6 +73,9 @@ ui <- shiny::fluidPage(
       shiny::checkboxInput("TTS_select",
                            "Use Text-to-Speech",
                            value = FALSE),
+      shiny::checkboxInput("small_font_select",
+                           "Use smaller font for combos",
+                           value = FALSE),
       shiny::hr(),
       shiny::sliderInput("date_select",
                          "Date added:",
@@ -125,7 +128,8 @@ ui <- shiny::fluidPage(
       shiny::h3(paste0("Status:")),
       shiny::span(shiny::textOutput("status"), style = "font-size:20px"),
       shiny::h3(paste0("Current combo:")),
-      shiny::span(shiny::textOutput("combo"), style="font-size:80px")
+      # shiny::span(shiny::textOutput("combo"), style="font-size:80px")
+      shiny::uiOutput("combo")
     )
   )
 )
@@ -203,12 +207,31 @@ server <- function(input, output, session) {
   })
   
   # output combo
-  output$combo = shiny::renderText({
+  # output$combo = shiny::renderText({
+  #   # if the app is running and we have a combo to show
+  #   if (state$running) {
+  #     if (state$combo>0 && 
+  #         state$combo<=input$n_combos_per_round) {
+  #       round_combis()$combi[state$combo]
+  #     }
+  #   } else {
+  #     ""
+  #   }
+  # })
+  output$combo = shiny::renderUI({
+    if (input$small_font_select) {
+      font_size = "20px"
+    } else {
+      font_size = "80px"
+    }
     # if the app is running and we have a combo to show
     if (state$running) {
-      if (state$combo>0 && 
+      if (state$combo>0 &&
           state$combo<=input$n_combos_per_round) {
-        round_combis()$combi[state$combo]
+        tags$span(
+          style = paste0("font-size:",font_size,";"),
+          round_combis()$combi[state$combo]
+        )
       }
     } else {
       ""
