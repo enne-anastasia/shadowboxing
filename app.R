@@ -14,7 +14,6 @@ library(shinyjs)
 library(shinytitle)
 library(readr)
 library(dplyr)
-library(beepr)
 
 # Loading the combo database for the interface
 
