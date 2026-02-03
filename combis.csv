@@ -33,7 +33,7 @@ id,combi,length,date_added,type
 32,double jab - cross,3,26.12.2025,boxing
 33,jab - cross - jab,3,26.12.2025,boxing
 34,rear hook - lead hook,2,26.12.2025,boxing
-35,jab - cross - uppercut - lead teep - side kick ,5,06.01.2026,kickboxing
+35,jab - cross - uppercut - lead teep - side kick,5,06.01.2026,kickboxing
 36,jab - cross - uppercut - rear low kick - lead low kick - cross - uppercut - hook - lead low kick - rear low kick,10,06.01.2026,kickboxing
 37,jab - cross - uppercut - rear roundhouse kick,4,06.01.2026,kickboxing
 38,jab to the head - jab to the body - faint jab to the body and hook,3,08.01.2026,boxing
@@ -55,3 +55,7 @@ id,combi,length,date_added,type
 54,jab - lead uppercut - cross - hook,4,30.01.2026,boxing
 55,jab - cross - uppercut - rear low kick,4,30.01.2026,kickboxing
 56,lead low kick - cross - hook to the body - hook to the body - hook to the head - rear high kick,6,30.01.2026,kickboxing
+57,jab - cross - uppercut,3,03.02.2026,boxing
+58,jab - cross - uppercut - hook,4,03.02.2026,boxing
+59,roll lead hook - cross - hook,3,03.02.2026,boxing
+60,roll rear hook - lead hook - cross,3,03.02.2026,boxing
